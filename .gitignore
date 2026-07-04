@@ -18,6 +18,7 @@ go.work.sum
 
 # Environment variables
 .env
+storage
 
 # IDE files
 .vscode/
