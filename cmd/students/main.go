@@ -41,7 +41,6 @@ func main() {
 	}
 
 	slog.Info("Server Started", slog.String("address", cfg.Addr))
-	// fmt.Printf("Server Started %s", cfg.HTTPServer.Addr)
 
 	done := make(chan os.Signal, 1)
 
