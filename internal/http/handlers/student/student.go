@@ -72,3 +72,9 @@ func GetById(storage storage.Storage) http.HandlerFunc {
 
 	}
 }
+
+func GetList(storage storage.Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+	}
+}
