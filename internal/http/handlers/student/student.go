@@ -86,3 +86,41 @@ func GetList(storage storage.Storage) http.HandlerFunc {
 		response.WriteJson(w, http.StatusOK, students)
 	}
 }
+
+func UpdateStudent(storage storage.Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		id := r.PathValue("id")
+
+		intId, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
+			return
+		}
+
+		var student types.Student
+
+		err = json.NewDecoder(r.Body).Decode(&student)
+		if err != nil {
+			// handle error
+		}
+
+		rowsAffected, err := storage.UpdateStudent(
+			student.Name,
+			student.Email,
+			student.Age,
+			intId,
+		)
+
+		if err != nil {
+			response.WriteJson(w, http.StatusInternalServerError,
+				response.GeneralError(err))
+			return
+		}
+
+		response.WriteJson(w, http.StatusOK, map[string]any{
+			"message": "Student updated successfully",
+			"rows":    rowsAffected,
+		})
+	}
+}
