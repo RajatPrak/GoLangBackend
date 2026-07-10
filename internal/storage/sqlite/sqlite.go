@@ -140,7 +140,7 @@ func (s *Sqlite) UpdateStudent(name string, email string, age int, id int64) (in
 
 func (s *Sqlite) DeleteStudentById(id int64) (int64, error) {
 	stmt, err := s.Db.Prepare(`
-		DELETE students
+		DELETE FROM students
 		WHERE id = ?
 	`)
 	if err != nil {

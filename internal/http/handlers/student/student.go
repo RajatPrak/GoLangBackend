@@ -223,20 +223,38 @@ func PartiallyUpdateStudent(storage storage.Storage) http.HandlerFunc {
 
 func DeleteStudentById(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Get ID from URL
 		id := r.PathValue("id")
 
+		slog.Info("Deleting student", slog.String("id", id))
+
+		// Convert string to int64
 		intId, err := strconv.ParseInt(id, 10, 64)
-
-		slog.Info("Deleting Student", slog.String("id", id))
-
-		student, err := storage.DeleteStudentById(intId)
-
 		if err != nil {
-			slog.Error("error getting user", slog.String("id", id))
-			response.WriteJson(w, http.StatusInternalServerError, response.GeneralError(err))
+			response.WriteJson(w,
+				http.StatusBadRequest,
+				response.GeneralError(err))
 			return
 		}
 
-		response.WriteJson(w, http.StatusOK, student)
+		// Delete student
+		rowsAffected, err := storage.DeleteStudentById(intId)
+		if err != nil {
+			slog.Error("Failed to delete student",
+				slog.String("id", id),
+				slog.String("error", err.Error()))
+
+			response.WriteJson(w,
+				http.StatusInternalServerError,
+				response.GeneralError(err))
+			return
+		}
+
+		// Success response
+		response.WriteJson(w, http.StatusOK, map[string]any{
+			"message": "Student deleted successfully",
+			"rows":    rowsAffected,
+		})
 	}
 }
