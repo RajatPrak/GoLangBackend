@@ -90,6 +90,7 @@ func GetList(storage storage.Storage) http.HandlerFunc {
 func UpdateStudent(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
+		// Get id from URL
 		id := r.PathValue("id")
 
 		intId, err := strconv.ParseInt(id, 10, 64)
@@ -98,13 +99,36 @@ func UpdateStudent(storage storage.Storage) http.HandlerFunc {
 			return
 		}
 
+		// Decode request body
 		var student types.Student
 
 		err = json.NewDecoder(r.Body).Decode(&student)
-		if err != nil {
-			// handle error
+
+		// Empty body
+		if errors.Is(err, io.EOF) {
+			response.WriteJson(w, http.StatusBadRequest,
+				response.GeneralError(fmt.Errorf("empty body")))
+			return
 		}
 
+		// Invalid JSON
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest,
+				response.GeneralError(err))
+			return
+		}
+
+		// Validate request
+		if err := validator.New().Struct(student); err != nil {
+			validateErrs := err.(validator.ValidationErrors)
+
+			response.WriteJson(w,
+				http.StatusBadRequest,
+				response.ValidationError(validateErrs))
+			return
+		}
+
+		// Update student
 		rowsAffected, err := storage.UpdateStudent(
 			student.Name,
 			student.Email,
@@ -113,7 +137,8 @@ func UpdateStudent(storage storage.Storage) http.HandlerFunc {
 		)
 
 		if err != nil {
-			response.WriteJson(w, http.StatusInternalServerError,
+			response.WriteJson(w,
+				http.StatusInternalServerError,
 				response.GeneralError(err))
 			return
 		}
