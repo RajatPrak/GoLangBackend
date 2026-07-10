@@ -37,8 +37,8 @@ func main() {
 
 	//HOMEWORK
 
-	router.HandleFunc("PUT /api/updateStudents/{id}", student.UpdateStudent(storage))
-	// router.HandleFunc("PATCH")
+	router.HandleFunc("PUT /api/updateStudent/{id}", student.UpdateStudent(storage))
+	router.HandleFunc("PATCH /api/updateStudentPartially/{id}", student.PartiallyUpdateStudent(storage))
 	// router.HandleFunc("DELETE")
 	// Setup server
 	server := http.Server{
