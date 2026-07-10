@@ -137,3 +137,31 @@ func (s *Sqlite) UpdateStudent(name string, email string, age int, id int64) (in
 
 	return rowsAffected, nil
 }
+
+func (s *Sqlite) PartiallyUpdateStudent(name string, email string, age int, id int64) (int64, error) {
+	stmt, err := s.Db.Prepare(`
+		UPDATE students
+		SET name = ?, email = ?, age = ?
+		WHERE id = ?
+	`)
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+
+	result, err := stmt.Exec(name, email, age, id)
+	if err != nil {
+		return 0, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	if rowsAffected == 0 {
+		return 0, fmt.Errorf("student with id %d not found", id)
+	}
+
+	return rowsAffected, nil
+}

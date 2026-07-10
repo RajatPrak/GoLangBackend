@@ -13,7 +13,7 @@ type Storage interface {
 
 	UpdateStudent(name string, email string, age int, id int64) (int64, error)
 
-	// PartiallyUpdateStudent(name string, email string, age int) (int64, error)
+	PartiallyUpdateStudent(name string, email string, age int, id int64) (int64, error)
 
 	// DeleteStudent(id int64) (types.Student, error)
 }
