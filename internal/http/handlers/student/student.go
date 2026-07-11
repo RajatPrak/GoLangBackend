@@ -227,7 +227,7 @@ func DeleteStudentById(storage storage.Storage) http.HandlerFunc {
 		// Get ID from URL
 		id := r.PathValue("id")
 
-		slog.Info("Deleting student", slog.String("id", id))
+		slog.Info("Deleting student with", slog.String("id", id))
 
 		// Convert string to int64
 		intId, err := strconv.ParseInt(id, 10, 64)
