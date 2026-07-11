@@ -14,4 +14,6 @@ type Storage interface {
 	UpdateStudent(name string, email string, age int, id int64) (int64, error)
 
 	DeleteStudentById(id int64) (int64, error)
+
+	PromoteStudentById(id int64) (int64, error)
 }

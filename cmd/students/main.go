@@ -40,6 +40,8 @@ func main() {
 	router.HandleFunc("PUT /api/updateStudent/{id}", student.UpdateStudent(storage))
 	router.HandleFunc("PATCH /api/updateStudentPartially/{id}", student.PartiallyUpdateStudent(storage))
 	router.HandleFunc("DELETE /api/deleteStudent/{id}", student.DeleteStudentById(storage))
+	// RoughWork for testing purpose only
+	router.HandleFunc("PUT /api/promoteStudent/{id}", student.PromoteStudentById(storage))
 	// Setup server
 	server := http.Server{
 		Addr:    cfg.Addr,

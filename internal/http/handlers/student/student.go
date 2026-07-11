@@ -40,7 +40,7 @@ func New(storage storage.Storage) http.HandlerFunc {
 
 		lastId, err := storage.CreateStudent(student.Name, student.Email, student.Age)
 
-		slog.Info("user created successfully", slog.String("userId", fmt.Sprint(lastId)))
+		slog.Info("user created successfully with", slog.String("userId", fmt.Sprint(lastId)))
 		if err != nil {
 			response.WriteJson(w, http.StatusInternalServerError, err)
 			return
@@ -94,7 +94,7 @@ func UpdateStudent(storage storage.Storage) http.HandlerFunc {
 		id := r.PathValue("id")
 		intId, err := strconv.ParseInt(id, 10, 64)
 
-		slog.Info("Student Updated", slog.String("id", id))
+		slog.Info("Student Updated with", slog.String("id", id))
 
 		if err != nil {
 			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
@@ -163,7 +163,7 @@ func PartiallyUpdateStudent(storage storage.Storage) http.HandlerFunc {
 			return
 		}
 
-		slog.Info("Partially Updating Student", slog.String("id", id))
+		slog.Info("Partially Updating Student with", slog.String("id", id))
 
 		// Get existing student from database
 		student, err := storage.GetStudentById(intId)
@@ -255,6 +255,19 @@ func DeleteStudentById(storage storage.Storage) http.HandlerFunc {
 		response.WriteJson(w, http.StatusOK, map[string]any{
 			"message": "Student deleted successfully",
 			"rows":    rowsAffected,
+		})
+	}
+}
+
+func PromoteStudentById(storage storage.Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+
+		slog.Info("api hit successfully", slog.String("id", id))
+		storage.PromoteStudentById(5)
+		response.WriteJson(w, http.StatusOK, map[string]any{
+			"message": "Testing api",
+			"goal":    "Become a good developer",
 		})
 	}
 }
