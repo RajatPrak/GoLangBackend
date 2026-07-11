@@ -259,6 +259,7 @@ func DeleteStudentById(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
+// UseLess function made for just testing
 func PromoteStudentById(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := r.PathValue("id")

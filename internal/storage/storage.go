@@ -15,5 +15,6 @@ type Storage interface {
 
 	DeleteStudentById(id int64) (int64, error)
 
+	// UseLess function made for just testing
 	PromoteStudentById(id int64) (int64, error)
 }
